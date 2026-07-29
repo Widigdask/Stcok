@@ -1,0 +1,537 @@
+/* =========================================================
+   APLIKASI STOCK BARANG
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+    background:#eef3f9;
+}
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar{
+    background:linear-gradient(135deg,#2563eb,#1d4ed8)!important;
+}
+
+.navbar .container-fluid{
+    flex-wrap:nowrap;
+    gap:10px;
+}
+
+.navbar-brand{
+    font-size:24px;
+    font-weight:700;
+    letter-spacing:.5px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+#btnRefreshData{
+    flex-shrink:0;
+    white-space:nowrap;
+}
+
+/* =========================================================
+   MENU TAB
+========================================================= */
+
+.nav-pills .nav-link{
+
+    color:#0f172a;
+
+    border-radius:12px;
+
+    padding:12px 25px;
+
+    font-weight:600;
+
+    transition:.25s;
+
+    white-space:nowrap;
+
+}
+
+.nav-pills .nav-link:hover{
+
+    background:#dbeafe;
+
+    color:#2563eb;
+
+}
+
+.nav-pills .nav-link.active{
+
+    background:#2563eb!important;
+
+    color:#fff!important;
+
+}
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.card{
+
+    border:none;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    margin-bottom:30px;
+
+    box-shadow:0 15px 35px rgba(0,0,0,.08);
+
+}
+
+.card-header{
+
+    padding:18px 22px;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+}
+
+.card-body{
+
+    padding:25px;
+
+}
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.form-label{
+
+    font-weight:600;
+
+    margin-bottom:7px;
+
+    color:#334155;
+
+}
+
+.form-control,
+.form-select{
+
+    height:48px;
+
+    border-radius:12px;
+
+    border:1px solid #cbd5e1;
+
+    transition:.25s;
+
+}
+
+.form-control:focus,
+.form-select:focus{
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 .2rem rgba(37,99,235,.15);
+
+}
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+.btn{
+
+    border-radius:12px;
+
+    padding:10px 18px;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.btn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.btn-success{
+
+    background:#16a34a;
+
+    border:none;
+
+}
+
+.btn-primary{
+
+    border:none;
+
+}
+
+.btn-warning{
+
+    color:#fff;
+
+}
+
+.btn-danger{
+
+    border:none;
+
+}
+
+.btn-sm{
+
+    border-radius:9px;
+
+}
+
+/* =========================================================
+   TOOLBAR AKSI
+   (Tambah / Import Excel / Export Excel / Hapus Terpilih)
+========================================================= */
+
+.toolbar-aksi{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+.toolbar-aksi .btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:6px;
+
+    white-space:nowrap;
+
+}
+
+.toolbar-aksi .btn .bi{
+
+    margin-right:0;
+
+}
+
+/* =========================================================
+   CEKLIST / CHECKBOX BARIS TABEL
+========================================================= */
+
+.form-check-input{
+
+    width:20px;
+
+    height:20px;
+
+    cursor:pointer;
+
+    vertical-align:middle;
+
+}
+
+.table thead .form-check-input{
+
+    border-color:rgba(255,255,255,.7);
+
+    background-color:rgba(255,255,255,.15);
+
+}
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table{
+
+    margin-top:15px;
+
+    border-radius:15px;
+
+    overflow:hidden;
+
+}
+
+.table thead th{
+
+    text-align:center;
+
+    vertical-align:middle;
+
+    white-space:nowrap;
+
+}
+
+.table td{
+
+    vertical-align:middle;
+
+}
+
+.table tbody tr{
+
+    transition:.2s;
+
+}
+
+.table tbody tr:hover{
+
+    background:#eff6ff;
+
+}
+
+/* =========================================================
+   INPUT GROUP
+========================================================= */
+
+.row{
+
+    margin-bottom:10px;
+
+}
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+#cariBarang,
+#cariMasuk,
+#cariKeluar,
+#cariStock{
+
+    max-width:350px;
+
+}
+
+/* =========================================================
+   SCROLL TABLE
+========================================================= */
+
+.table-responsive{
+
+    border-radius:15px;
+
+}
+
+/* =========================================================
+   BADGE
+========================================================= */
+
+.badge{
+
+    font-size:13px;
+
+    padding:8px 10px;
+
+}
+
+/* =========================================================
+   ICON
+========================================================= */
+
+.bi{
+
+    margin-right:5px;
+
+}
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+.card{
+
+    animation:fade .4s ease;
+
+}
+
+@keyframes fade{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(15px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* =========================================================
+   RESPONSIVE — TABLET (<=992px)
+   Toolbar tombol jadi grid 2 kolom yang rapi,
+   bukan tombol full-width memanjang satu per satu.
+   Tombol lain (navbar, tombol kecil di tabel) TIDAK
+   ikut dipaksa full-width supaya tidak "aneh".
+========================================================= */
+
+@media(max-width:992px){
+
+    .toolbar-aksi{
+
+        display:grid;
+
+        grid-template-columns:1fr 1fr;
+
+        gap:8px;
+
+    }
+
+    .toolbar-aksi .btn{
+
+        width:100%;
+
+        margin:0;
+
+    }
+
+}
+
+/* =========================================================
+   RESPONSIVE — MOBILE (<=768px)
+========================================================= */
+
+@media(max-width:768px){
+
+    .navbar-brand{
+
+        font-size:16px;
+
+    }
+
+    .navbar-brand .bi{
+
+        font-size:18px;
+
+    }
+
+    #btnRefreshData{
+
+        font-size:12px;
+
+        padding:8px 12px;
+
+    }
+
+    .card-body{
+
+        padding:15px;
+
+    }
+
+    .nav-pills{
+
+        flex-wrap:wrap;
+
+    }
+
+    .nav-pills .nav-link{
+
+        padding:10px 16px;
+
+        font-size:14px;
+
+    }
+
+    .table{
+
+        font-size:13px;
+
+    }
+
+    .table thead th{
+
+        font-size:12px;
+
+    }
+
+}
+
+/* =========================================================
+   RESPONSIVE — SMARTPHONE KECIL (<=576px)
+========================================================= */
+
+@media(max-width:576px){
+
+    .card-header{
+
+        font-size:16px;
+
+        padding:14px 16px;
+
+    }
+
+    .card-header .bi{
+
+        font-size:15px;
+
+    }
+
+    .btn{
+
+        font-size:14px;
+
+    }
+
+    .toolbar-aksi{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .form-control,
+    .form-select{
+
+        height:44px;
+
+        font-size:14px;
+
+    }
+
+    .btn-sm{
+
+        padding:6px 10px;
+
+        font-size:13px;
+
+    }
+
+    .form-check-input{
+
+        width:18px;
+
+        height:18px;
+
+    }
+}

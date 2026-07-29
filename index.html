@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APLIKASI STOCK BARANG</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Custom Stylesheet -->
+  <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- ========================================== -->
+  <!-- NAVBAR -->
+  <!-- ========================================== -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="#">
+        <i class="bi bi-box-seam-fill"></i>
+        APLIKASI STOCK BARANG
+      </a>
+      <button class="btn btn-outline-light btn-sm" id="btnRefreshData" title="Sinkronkan data dari Google Sheets">
+        <i class="bi bi-arrow-clockwise"></i>
+        REFRESH
+      </button>
+    </div>
+  </nav>
+
+  <!-- ========================================== -->
+  <!-- OVERLAY LOADING -->
+  <!-- ========================================== -->
+  <div id="loadingOverlay" style="display:flex; position:fixed; inset:0; background:rgba(255,255,255,0.9); z-index:2000; align-items:center; justify-content:center;">
+    <div class="text-center">
+      <div class="spinner-border text-primary" role="status"></div>
+      <div class="mt-2 fw-semibold text-primary">Memuat data...</div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- KONTEN UTAMA -->
+  <!-- ========================================== -->
+  <div class="container-fluid py-4">
+
+    <!-- ========================================== -->
+    <!-- MENU (NAV PILLS) -->
+    <!-- ========================================== -->
+    <ul class="nav nav-pills justify-content-center mb-4 gap-2" id="menuUtama" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="tabDataBarang" data-bs-toggle="tab" data-bs-target="#dataBarang" type="button" role="tab">
+          <i class="bi bi-box"></i>
+          DATA BARANG
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tabBarangMasuk" data-bs-toggle="tab" data-bs-target="#barangMasuk" type="button" role="tab">
+          <i class="bi bi-box-arrow-in-down"></i>
+          BARANG MASUK
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tabBarangKeluar" data-bs-toggle="tab" data-bs-target="#barangKeluar" type="button" role="tab">
+          <i class="bi bi-box-arrow-up"></i>
+          BARANG KELUAR
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tabStockGudang" data-bs-toggle="tab" data-bs-target="#stockGudang" type="button" role="tab">
+          <i class="bi bi-building"></i>
+          STOCK GUDANG
+        </button>
+      </li>
+    </ul>
+
+    <!-- ========================================== -->
+    <!-- TAB CONTENT -->
+    <!-- ========================================== -->
+    <div class="tab-content" id="isiMenu">
+
+      <!-- ========================================== -->
+      <!-- DATA BARANG -->
+      <!-- ========================================== -->
+      <div class="tab-pane fade show active" id="dataBarang" role="tabpanel">
+        <div class="card shadow-sm border-0">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="bi bi-box-seam"></i> DATA BARANG</h5>
+          </div>
+
+          <div class="card-body">
+
+            <!-- Form Input Barang -->
+            <div class="row g-3">
+              <div class="col-md-3">
+                <label for="kodeBarang" class="form-label">KODE</label>
+                <input type="text" id="kodeBarang" class="form-control" placeholder="Masukkan Kode Barang">
+              </div>
+              <div class="col-md-5">
+                <label for="namaBarang" class="form-label">NAMA BARANG</label>
+                <input type="text" id="namaBarang" class="form-control" placeholder="Masukkan Nama Barang">
+              </div>
+              <div class="col-md-2">
+                <label for="satuanBarang" class="form-label">SATUAN</label>
+                <input type="text" id="satuanBarang" class="form-control" placeholder="Contoh: PCS">
+              </div>
+              <div class="col-md-2">
+                <label for="stokAwalBarang" class="form-label">STOK AWAL</label>
+                <input type="number" id="stokAwalBarang" class="form-control" placeholder="0">
+              </div>
+            </div>
+
+            <!-- Search Data Barang -->
+            <div class="row mt-3">
+              <div class="col-md-4">
+                <input type="text" id="cariBarang" class="form-control" placeholder="Cari Kode / Nama Barang">
+              </div>
+            </div>
+
+            <!-- Tombol Aksi -->
+            <div class="mt-3 d-flex flex-wrap gap-2 toolbar-aksi">
+              <button class="btn btn-success" id="btnTambahBarang">
+                <i class="bi bi-plus-circle"></i>
+                TAMBAH
+              </button>
+              <button class="btn btn-primary" id="btnImportBarang">
+                <i class="bi bi-file-earmark-excel"></i>
+                IMPORT EXCEL
+              </button>
+              <button class="btn btn-success" id="btnExportBarang">
+                <i class="bi bi-download"></i>
+                EXPORT EXCEL
+              </button>
+              <button class="btn btn-danger" id="btnHapusTerpilihBarang">
+                <i class="bi bi-trash3"></i>
+                HAPUS TERPILIH
+              </button>
+            </div>
+
+            <!-- Input File Import (Tersembunyi) -->
+            <input type="file" id="importBarang" accept=".xlsx,.xls" hidden>
+
+            <hr>
+
+            <!-- Tabel Data Barang -->
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead class="table-dark">
+                  <tr>
+                    <th width="40"><input type="checkbox" class="form-check-input" id="checkAllBarang" title="Pilih semua"></th>
+                    <th width="50">NO</th>
+                    <th>KODE</th>
+                    <th>NAMA BARANG</th>
+                    <th>SATUAN</th>
+                    <th>STOK AWAL</th>
+                    <th width="80">AKSI</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyBarang">
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- BARANG MASUK -->
+      <!-- ========================================== -->
+      <div class="tab-pane fade" id="barangMasuk" role="tabpanel">
+        <div class="card shadow-sm border-0">
+          <div class="card-header bg-success text-white">
+            <h5 class="mb-0"><i class="bi bi-box-arrow-in-down"></i> BARANG MASUK</h5>
+          </div>
+
+          <div class="card-body">
+
+            <!-- Form Input Barang Masuk -->
+            <div class="row g-3">
+              <div class="col-md-2">
+                <label for="tanggalMasuk" class="form-label">TANGGAL</label>
+                <input type="date" id="tanggalMasuk" class="form-control">
+              </div>
+              <div class="col-md-2">
+                <label for="kodeMasuk" class="form-label">KODE</label>
+                <select id="kodeMasuk" class="form-select">
+                  <option value="">Pilih Kode Barang</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label for="namaMasuk" class="form-label">NAMA BARANG</label>
+                <input type="text" id="namaMasuk" class="form-control bg-light" placeholder="Otomatis mengikuti kode" readonly>
+              </div>
+              <div class="col-md-2">
+                <label for="qtyMasuk" class="form-label">QTY</label>
+                <input type="text" id="qtyMasuk" class="form-control" placeholder="0" inputmode="numeric">
+              </div>
+              <div class="col-md-3">
+                <label for="keteranganMasuk" class="form-label">KETERANGAN</label>
+                <input type="text" id="keteranganMasuk" class="form-control" placeholder="Masukkan Keterangan">
+              </div>
+            </div>
+
+            <!-- Search Barang Masuk -->
+            <div class="row mt-3">
+              <div class="col-md-4">
+                <input type="text" id="cariMasuk" class="form-control" placeholder="Cari Barang Masuk">
+              </div>
+            </div>
+
+            <!-- Tombol Aksi -->
+            <div class="mt-3 d-flex flex-wrap gap-2 toolbar-aksi">
+              <button class="btn btn-success" id="btnTambahMasuk">
+                <i class="bi bi-plus-circle"></i>
+                TAMBAH
+              </button>
+              <button class="btn btn-primary" id="btnImportMasuk">
+                <i class="bi bi-file-earmark-excel"></i>
+                IMPORT EXCEL
+              </button>
+              <button class="btn btn-success" id="btnExportMasuk">
+                <i class="bi bi-download"></i>
+                EXPORT EXCEL
+              </button>
+              <button class="btn btn-danger" id="btnHapusTerpilihMasuk">
+                <i class="bi bi-trash3"></i>
+                HAPUS TERPILIH
+              </button>
+            </div>
+
+            <!-- Input File Import (Tersembunyi) -->
+            <input type="file" id="importMasuk" accept=".xlsx,.xls" hidden>
+
+            <hr>
+
+            <!-- Tabel Barang Masuk -->
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead class="table-success">
+                  <tr>
+                    <th width="40"><input type="checkbox" class="form-check-input" id="checkAllMasuk" title="Pilih semua"></th>
+                    <th width="50">NO</th>
+                    <th>TANGGAL</th>
+                    <th>KODE</th>
+                    <th>NAMA BARANG</th>
+                    <th>QTY</th>
+                    <th>KETERANGAN</th>
+                    <th width="80">AKSI</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyMasuk">
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- BARANG KELUAR -->
+      <!-- ========================================== -->
+      <div class="tab-pane fade" id="barangKeluar" role="tabpanel">
+        <div class="card shadow-sm border-0">
+          <div class="card-header bg-danger text-white">
+            <h5 class="mb-0"><i class="bi bi-box-arrow-up"></i> BARANG KELUAR</h5>
+          </div>
+
+          <div class="card-body">
+
+            <!-- Form Input Barang Keluar -->
+            <div class="row g-3">
+              <div class="col-md-2">
+                <label for="tanggalKeluar" class="form-label">TANGGAL</label>
+                <input type="date" id="tanggalKeluar" class="form-control">
+              </div>
+              <div class="col-md-2">
+                <label for="kodeKeluar" class="form-label">KODE</label>
+                <select id="kodeKeluar" class="form-select">
+                  <option value="">Pilih Kode Barang</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label for="namaKeluar" class="form-label">NAMA BARANG</label>
+                <input type="text" id="namaKeluar" class="form-control bg-light" placeholder="Otomatis mengikuti kode" readonly>
+              </div>
+              <div class="col-md-2">
+                <label for="qtyKeluar" class="form-label">QTY</label>
+                <input type="text" id="qtyKeluar" class="form-control" placeholder="0" inputmode="numeric">
+              </div>
+              <div class="col-md-3">
+                <label for="keteranganKeluar" class="form-label">KETERANGAN</label>
+                <input type="text" id="keteranganKeluar" class="form-control" placeholder="Masukkan Keterangan">
+              </div>
+            </div>
+
+            <!-- Search Barang Keluar -->
+            <div class="row mt-3">
+              <div class="col-md-4">
+                <input type="text" id="cariKeluar" class="form-control" placeholder="Cari Barang Keluar">
+              </div>
+            </div>
+
+            <!-- Tombol Aksi -->
+            <div class="mt-3 d-flex flex-wrap gap-2 toolbar-aksi">
+              <button class="btn btn-success" id="btnTambahKeluar">
+                <i class="bi bi-plus-circle"></i>
+                TAMBAH
+              </button>
+              <button class="btn btn-primary" id="btnImportKeluar">
+                <i class="bi bi-file-earmark-excel"></i>
+                IMPORT EXCEL
+              </button>
+              <button class="btn btn-success" id="btnExportKeluar">
+                <i class="bi bi-download"></i>
+                EXPORT EXCEL
+              </button>
+              <button class="btn btn-danger" id="btnHapusTerpilihKeluar">
+                <i class="bi bi-trash3"></i>
+                HAPUS TERPILIH
+              </button>
+            </div>
+
+            <!-- Input File Import (Tersembunyi) -->
+            <input type="file" id="importKeluar" accept=".xlsx,.xls" hidden>
+
+            <hr>
+
+            <!-- Tabel Barang Keluar -->
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead class="table-danger">
+                  <tr>
+                    <th width="40"><input type="checkbox" class="form-check-input" id="checkAllKeluar" title="Pilih semua"></th>
+                    <th width="50">NO</th>
+                    <th>TANGGAL</th>
+                    <th>KODE</th>
+                    <th>NAMA BARANG</th>
+                    <th>QTY</th>
+                    <th>KETERANGAN</th>
+                    <th width="80">AKSI</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyKeluar">
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- STOCK GUDANG -->
+      <!-- ========================================== -->
+      <div class="tab-pane fade" id="stockGudang" role="tabpanel">
+        <div class="card shadow-sm border-0">
+          <div class="card-header bg-dark text-white">
+            <h5 class="mb-0"><i class="bi bi-building"></i> STOCK GUDANG</h5>
+          </div>
+
+          <div class="card-body">
+
+            <!-- Form Input Harga Barang -->
+            <div class="row g-3">
+              <div class="col-md-3">
+                <label for="kodeStock" class="form-label">KODE</label>
+                <input type="text" id="kodeStock" class="form-control" placeholder="Masukkan Kode Barang">
+              </div>
+              <div class="col-md-3">
+                <label for="hargaStock" class="form-label">HARGA BARANG</label>
+                <input type="number" id="hargaStock" class="form-control" placeholder="0">
+              </div>
+            </div>
+
+            <!-- Search Stock Gudang -->
+            <div class="row mt-3">
+              <div class="col-md-4">
+                <input type="text" id="cariStock" class="form-control" placeholder="Cari Kode / Nama Barang">
+              </div>
+            </div>
+
+            <!-- Tombol Aksi -->
+            <div class="mt-3 d-flex flex-wrap gap-2 toolbar-aksi">
+              <button class="btn btn-success" id="btnTambahStock">
+                <i class="bi bi-plus-circle"></i>
+                TAMBAH
+              </button>
+              <button class="btn btn-primary" id="btnImportStock">
+                <i class="bi bi-file-earmark-excel"></i>
+                IMPORT EXCEL
+              </button>
+              <button class="btn btn-success" id="btnExportStock">
+                <i class="bi bi-download"></i>
+                EXPORT EXCEL
+              </button>
+            </div>
+
+            <!-- Input File Import (Tersembunyi) -->
+            <input type="file" id="importStock" accept=".xlsx,.xls" hidden>
+
+            <hr>
+
+            <!-- Tabel Stock Gudang (Hanya Tampilan) -->
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead class="table-dark">
+                  <tr>
+                    <th width="60">NO</th>
+                    <th>KODE</th>
+                    <th>NAMA BARANG</th>
+                    <th>STOK AWAL</th>
+                    <th>TOTAL MASUK</th>
+                    <th>TOTAL KELUAR</th>
+                    <th>STOK AKHIR</th>
+                    <th>HARGA BARANG</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyStock">
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- SCRIPT -->
+  <!-- ========================================== -->
+
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- SheetJS (Import / Export Excel) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+  <!-- JavaScript Aplikasi -->
+  <script src="js/config.js?v=4"></script>
+  <script src="js/helper.js?v=4"></script>
+  <script src="js/storage.js?v=4"></script>
+  <script src="js/barang.js?v=4"></script>
+  <script src="js/masuk.js?v=4"></script>
+  <script src="js/keluar.js?v=4"></script>
+  <script src="js/stock.js?v=4"></script>
+  <script src="js/excel.js?v=4"></script>
+  <script src="js/app.js?v=4"></script>
+
+</body>
+</html>
