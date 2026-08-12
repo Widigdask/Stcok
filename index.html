@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MANDALIKA GRUP — Portal Internal</title>
+<meta name="theme-color" content="#0a0e1a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#090d18;
+    --bg-panel:#121729;
+    --bg-panel-2:#161d33;
+    --hairline:#232b45;
+    --gold:#c9a13b;
+    --gold-soft:#e6cf8f;
+    --stock-blue:#3b82f6;
+    --finance-red:#f2564d;
+    --ink:#f3efe4;
+    --muted:#8b93a9;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1100px 600px at 50% -10%, rgba(201,161,59,0.10), transparent 60%),
+      radial-gradient(900px 500px at 85% 90%, rgba(242,86,77,0.07), transparent 55%),
+      radial-gradient(900px 500px at 10% 95%, rgba(59,130,246,0.08), transparent 55%),
+      var(--bg);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    min-height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:64px 20px 40px;
+  }
+
+  .kicker{
+    font-family:'Inter',sans-serif;
+    font-size:0.72rem;
+    letter-spacing:0.32em;
+    text-transform:uppercase;
+    color:var(--gold-soft);
+    margin:0 0 18px;
+    opacity:0;
+    animation:rise .6s ease forwards;
+  }
+
+  .wordmark{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:clamp(2.4rem, 7vw, 4.6rem);
+    letter-spacing:-0.01em;
+    margin:0;
+    text-align:center;
+    line-height:1.02;
+    background:linear-gradient(180deg, var(--ink) 0%, var(--gold-soft) 130%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    opacity:0;
+    animation:rise .7s .08s ease forwards;
+  }
+
+  .rule{
+    width:64px;
+    height:3px;
+    margin:22px 0 20px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+    border-radius:3px;
+    opacity:0;
+    animation:rise .6s .18s ease forwards;
+  }
+
+  .tagline{
+    max-width:520px;
+    text-align:center;
+    color:var(--muted);
+    font-size:1rem;
+    line-height:1.6;
+    margin:0 0 56px;
+    opacity:0;
+    animation:rise .6s .24s ease forwards;
+  }
+
+  @keyframes rise{
+    from{opacity:0; transform:translateY(10px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  .grid{
+    width:100%;
+    max-width:920px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+    position:relative;
+  }
+
+  .spine{
+    position:absolute;
+    top:-30px;
+    left:50%;
+    width:1px;
+    height:30px;
+    background:linear-gradient(180deg, var(--gold), transparent);
+    transform:translateX(-50%);
+    opacity:0.6;
+  }
+
+  .card{
+    --accent: var(--stock-blue);
+    position:relative;
+    background:linear-gradient(180deg, var(--bg-panel-2), var(--bg-panel));
+    border:1px solid var(--hairline);
+    border-radius:16px;
+    padding:32px 28px;
+    text-decoration:none;
+    color:var(--ink);
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    overflow:hidden;
+    opacity:0;
+    animation:rise .6s .32s ease forwards;
+    transition:transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+  }
+  .card:nth-child(2){ animation-delay:.4s; }
+
+  .card::before{
+    content:"";
+    position:absolute;
+    inset:0 0 auto 0;
+    height:3px;
+    background:var(--accent);
+    opacity:0.85;
+  }
+
+  .card:hover{
+    transform:translateY(-4px);
+    border-color:var(--accent);
+    box-shadow:0 18px 40px -18px var(--accent);
+  }
+
+  .card .tag{
+    display:inline-flex;
+    align-self:flex-start;
+    align-items:center;
+    gap:8px;
+    font-size:0.7rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--accent);
+    font-weight:600;
+  }
+
+  .card .mark{
+    width:44px;
+    height:44px;
+    border-radius:10px;
+    display:grid;
+    place-items:center;
+    background:color-mix(in srgb, var(--accent) 16%, transparent);
+    color:var(--accent);
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:1.05rem;
+  }
+
+  .card h2{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:1.4rem;
+    margin:2px 0 0;
+    font-weight:600;
+  }
+
+  .card p{
+    margin:0;
+    color:var(--muted);
+    font-size:0.92rem;
+    line-height:1.55;
+    flex:1;
+  }
+
+  .card .enter{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:0.86rem;
+    font-weight:600;
+    color:var(--ink);
+    margin-top:4px;
+  }
+  .card .enter .arrow{
+    transition:transform .2s ease;
+  }
+  .card:hover .enter .arrow{ transform:translateX(4px); }
+
+  .card.finance{ --accent: var(--finance-red); }
+
+  footer{
+    margin-top:64px;
+    color:var(--muted);
+    font-size:0.78rem;
+    text-align:center;
+    letter-spacing:0.02em;
+    opacity:0;
+    animation:rise .6s .5s ease forwards;
+  }
+  footer strong{ color:var(--gold-soft); font-weight:600; }
+
+  @media (max-width: 640px){
+    .grid{ grid-template-columns:1fr; }
+    body{ padding:48px 18px 32px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; opacity:1 !important; transform:none !important; transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+  <p class="kicker">Portal Internal</p>
+  <h1 class="wordmark">MANDALIKA GRUP</h1>
+  <div class="rule"></div>
+  <p class="tagline">Satu pintu masuk untuk semua alat kerja Mandalika Grup. Pilih aplikasi yang ingin dibuka.</p>
+
+  <div class="grid">
+    <span class="spine" aria-hidden="true"></span>
+
+    <a class="card stock" href="STOCK.html">
+      <span class="mark" aria-hidden="true">📦</span>
+      <span class="tag">Inventori</span>
+      <h2>Stock Barang</h2>
+      <p>Catat barang masuk &amp; keluar, kelola data barang, dan pantau nilai stok gudang secara real-time.</p>
+      <span class="enter">Buka aplikasi <span class="arrow">→</span></span>
+    </a>
+
+    <a class="card finance" href="TOOL.html">
+      <span class="mark" aria-hidden="true">📄</span>
+      <span class="tag">Dokumen &amp; Finansial</span>
+      <h2>Tool Finansial &amp; PDF</h2>
+      <p>Konversi PDF &amp; gambar, ubah nominal jadi terbilang, dan hitung diskon/PPN langsung dari browser.</p>
+      <span class="enter">Buka aplikasi <span class="arrow">→</span></span>
+    </a>
+  </div>
+
+  <footer>© <span id="year"></span> <strong>Mandalika Grup</strong> — Portal internal</footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
